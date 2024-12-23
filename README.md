@@ -11,7 +11,7 @@
 </a>
 </p>
 
-## Overview 🛠️  (WIP)
+## Overview 🛠️
 Welcome to **alitiq's Forecasting Service SDK**, a robust Python-based SDK that simplifies interaction with alitiq’s Solar, and Engine (Demand) Forecast APIs. This SDK enables seamless data retrieval, measurements management, and forecasting for solar power plants, energy demand, and more. Built with flexibility and scalability in mind, it supports a range of features such as pushing measurements, retrieving forecasts, and managing locations.
 
 Before you start using the SDK, you need to obtain an API key. For the engine / demand API you will receive your key and relevant information from the alitiq Team. To obtain a key for the solar power forecasting API register here: [Solar-APP](https://solar-app.alitiq.com)
@@ -33,20 +33,27 @@ This is a work in progress. We will shortly add an extensive documentation with 
 ---
 
 ## Installation 📦  
+With pip: 
+```bash
+pip install alitiq
+```
 
+Or check out locally:
 1. Clone the repository:  
    ```bash
-   pip install alitiq
+   git clone https://github.com/alitiq/forecasting-sdk.git
+   cd forecasting-sdk
    ```
 2. Install dependencies:  
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Install the SDK locally:  
+3. (Optional) Install the SDK locally:  
    ```bash
    pip install .
    ```
+
 
 ---
 
