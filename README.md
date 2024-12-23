@@ -57,7 +57,7 @@ from datetime import datetime
 from alitiq import alitiqSolarAPI, SolarPowerPlantModel, PvMeasurementForm
 
 # Initialize the API client
-solar_api = alitiqSolarAPI(api_key="EnhcAcBcIl16UAtAd4DKm90LAKAvjVJm6h8ca2tk")
+solar_api = alitiqSolarAPI(api_key="your-api-key")
 
 # Create a solar power plant location
 plant = SolarPowerPlantModel(
