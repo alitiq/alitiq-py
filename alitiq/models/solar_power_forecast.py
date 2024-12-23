@@ -98,10 +98,12 @@ class SolarPowerPlantModel(BaseModel):
     )
     tilt: float = Field(..., ge=0, le=90, description="Tilt angle of the panels")
     temp_factor: Optional[float] = Field(
-        0.003, description="Temperature factor (optional)"
+        default=0.0033,
+        description="Temperature factor (optional). 0.0033 for free mounting, "
+        "0.004 for roof mounted, 0.005 for roof integrated",
     )
     mover: Optional[int] = Field(
-        0, description="Tracking type (e.g., 0 for fixed, 1 for single-axis)"
+        default=1, description="Tracking type (e.g., 1 for fixed, 2 for single-axis)"
     )
     max_rotation_angle: Optional[float] = Field(
         None, description="Maximum rotation angle for tracking systems"
