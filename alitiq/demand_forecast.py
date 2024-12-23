@@ -101,7 +101,9 @@ class alitiqDemandAPI(alitiqAPIBase):
             measurements = [measurements]
 
         try:
-            validated_data = [measurement.dict(exclude_unset=True) for measurement in measurements]
+            validated_data = [
+                measurement.dict(exclude_unset=True) for measurement in measurements
+            ]
         except ValidationError as e:
             raise ValueError(f"Validation failed for input data: {e}")
 

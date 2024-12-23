@@ -4,7 +4,6 @@ pydantic models to pass relevant data to SDK functions
 author: Daniel Lassahn, CTO, alitiq GmbH
 """
 
-from datetime import datetime
 from typing import Literal, Optional
 
 from pydantic import BaseModel, Field, validator
@@ -16,7 +15,7 @@ class EngineMeasurementForm(BaseModel):
 
     Attributes:
         id_location (str): Unique identifier for the location.
-        dt (datetime): Timestamp of the measurement.
+        dt (str): Timestamp of the measurement.
         power (float): Measured power in the specified unit.
         power_measure (str): Unit of power measurement (e.g., 'kW', 'MW').
         timezone (str): Timezone of the measurement. Defaults to 'UTC'.
@@ -25,7 +24,10 @@ class EngineMeasurementForm(BaseModel):
     """
 
     id_location: str = Field(..., description="Unique identifier for the location")
-    dt: datetime = Field(..., description="Timestamp of the measurement")
+    dt: str = Field(
+        ...,
+        description="Timestamp of the measurement in the form: 2019-01-09T22:15:00.000 or in ISO 8601 format",
+    )
     power: float = Field(..., description="Measured power in the specified unit")
     power_measure: Literal["W", "kW", "MW", "kWh", "Wh", "MWh"] = Field(
         "kW",
