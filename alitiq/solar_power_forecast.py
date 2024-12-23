@@ -62,7 +62,9 @@ class alitiqSolarAPI(alitiqAPIBase):
         if not isinstance(locations, list):
             locations = [locations]
         try:
-            validated_data = [location.dict() for location in locations]
+            validated_data = [
+                location.dict(exclude_unset=True) for location in locations
+            ]
         except ValidationError as e:
             raise ValueError(f"Validation failed for input data: {e}")
 
@@ -140,7 +142,9 @@ class alitiqSolarAPI(alitiqAPIBase):
             measurements = [measurements]
 
         try:
-            validated_data = [measurement.dict() for measurement in measurements]
+            validated_data = [
+                measurement.dict(exclude_unset=True) for measurement in measurements
+            ]
         except ValidationError as e:
             raise ValueError(f"Validation failed for input data: {e}")
 

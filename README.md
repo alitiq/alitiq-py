@@ -36,15 +36,14 @@ This is a work in progress. We will shortly add an extensive documentation with 
 
 1. Clone the repository:  
    ```bash
-   git clone https://github.com/alitiq/alitiq-py.git
-   cd alitiq-sdk
+   pip install alitiq
    ```
 2. Install dependencies:  
    ```bash
    pip install -r requirements.txt
    ```
 
-3. (Optional) Install the SDK locally:  
+3. Install the SDK locally:  
    ```bash
    pip install .
    ```
@@ -52,33 +51,64 @@ This is a work in progress. We will shortly add an extensive documentation with 
 ---
 
 ## Quickstart 🚀  
-Example shows how to add a new Solar PV power plant
+Example shows how to add a new Solar PV power plant, retrieve most recent forecast and push measurements for a given location. 
 ```python
-from alitiq import alitiqSolarAPI, SolarPowerPlantModel
+from datetime import datetime
+from alitiq import alitiqSolarAPI, SolarPowerPlantModel, PvMeasurementForm
 
 # Initialize the API client
-solar_api = alitiqSolarAPI(api_key="your-api-key")
+solar_api = alitiqSolarAPI(api_key="EnhcAcBcIl16UAtAd4DKm90LAKAvjVJm6h8ca2tk")
 
 # Create a solar power plant location
 plant = SolarPowerPlantModel(
     site_name="My Solar Plant",
     location_id="SP123",
-    latitude=40.7128,
-    longitude=-74.0060,
+    latitude=48.160170,
+    longitude=10.55907,
     installed_power=500.0,
     installed_power_inverter=480.0,
     azimuth=180.0,
     tilt=25.0,
-    temp_factor=0.95,
-    do_backtracking=True,
 )
 
 response = solar_api.create_location(plant)
 print("Location created:", response)
 
-# Retrieve a forecast
+# Retrieve a forecast ( after 1-6 hours after creation available)
 forecast = solar_api.get_forecast(location_id="SP123")
 print(forecast)
+
+# Post measurements 
+pv_measurements = [
+    PvMeasurementForm(
+        location_id="SP123",
+        dt=datetime(2024, 6, 10, 10).isoformat(),
+        power=120.5,
+        power_measure="kW",
+        timezone="UTC",
+        interval_in_minutes=15,
+    ),
+    PvMeasurementForm(
+        location_id="SP123",
+        dt=datetime(2024, 6, 10, 10, 15).isoformat(),
+        power=90.8,
+        power_measure="kW",
+        timezone="UTC",
+        interval_in_minutes=15,
+    ),
+    PvMeasurementForm(
+        location_id="SP123",
+        dt=datetime(2024, 6, 10, 10, 30).isoformat(),
+        power=150.0,
+        power_measure="kW",
+        timezone="UTC",
+        interval_in_minutes=15,
+    ),
+]
+
+response = solar_api.post_measurements(pv_measurements)
+print(response)
+
 ```
 Please note this docs for setting up your PV system locations: [How to setup PV systems at alitiq](https://makandracards.com/alitiq/621166-setup-pv-system-solar-power-forecast-alitiq/read)
 
@@ -138,6 +168,15 @@ We welcome contributions! To contribute:
 
 ## License 📜  
 t.b.d.
+
+---
+
+---
+
+## Developer Notes
+
+Run `python3 -m build` to build the package and then upload with twine: `twine upload -r pypi dist/*`  
+
 ---
 
 ## Support & Contact 📧  

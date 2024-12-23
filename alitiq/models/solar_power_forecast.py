@@ -4,7 +4,6 @@ pydantic models to pass relevant data to SDK functions
 author: Daniel Lassahn, CTO, alitiq GmbH
 """
 
-from datetime import datetime
 from typing import Literal, Optional
 
 from pydantic import BaseModel, Field, validator
@@ -16,7 +15,7 @@ class PvMeasurementForm(BaseModel):
 
     Attributes:
         location_id (str): Unique identifier for the location.
-        dt (datetime): Timestamp of the measurement.
+        dt (str): Timestamp of the measurement.
         power (float): Measured power in the specified unit.
         irradiance (float): Measured irradiance (optional, defaults to -1.0 if unknown).
         power_measure (str): Unit of power measurement (e.g., 'kW', 'MW').
@@ -26,7 +25,10 @@ class PvMeasurementForm(BaseModel):
     """
 
     location_id: str = Field(..., description="Unique identifier for the location")
-    dt: datetime = Field(..., description="Timestamp of the measurement")
+    dt: str = Field(
+        ...,
+        description="Timestamp of the measurement in the form: 2019-01-09T22:15:00.000",
+    )
     power: float = Field(..., description="Measured power in the specified unit")
     irradiance: float = Field(
         -1.0, description="Measured irradiance. Defaults to -1.0 if unknown."
@@ -96,10 +98,10 @@ class SolarPowerPlantModel(BaseModel):
     )
     tilt: float = Field(..., ge=0, le=90, description="Tilt angle of the panels")
     temp_factor: Optional[float] = Field(
-        None, description="Temperature factor (optional)"
+        0.003, description="Temperature factor (optional)"
     )
     mover: Optional[int] = Field(
-        None, description="Tracking type (e.g., 0 for fixed, 1 for single-axis)"
+        0, description="Tracking type (e.g., 0 for fixed, 1 for single-axis)"
     )
     max_rotation_angle: Optional[float] = Field(
         None, description="Maximum rotation angle for tracking systems"
@@ -108,7 +110,7 @@ class SolarPowerPlantModel(BaseModel):
         None, description="Distance between rows in meters"
     )
     do_backtracking: Optional[bool] = Field(
-        None, description="Whether the system performs backtracking"
+        False, description="Whether the system performs backtracking"
     )
     table_length: Optional[float] = Field(
         None, description="Length of each table in meters"
