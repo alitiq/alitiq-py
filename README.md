@@ -12,9 +12,9 @@
 </p>
 
 ## Overview 🛠️
-Welcome to **alitiq's Forecasting Service SDK**, a robust Python-based SDK that simplifies interaction with alitiq’s Solar, and Engine (Demand) Forecast APIs. This SDK enables seamless data retrieval, measurements management, and forecasting for solar power plants, energy demand, and more. Built with flexibility and scalability in mind, it supports a range of features such as pushing measurements, retrieving forecasts, and managing locations.
+Welcome to **alitiq's Forecasting Service SDK**, a robust Python-based SDK that simplifies interaction with alitiq’s Solar, and Engine (load) Forecast APIs. This SDK enables seamless data retrieval, measurements management, and forecasting for solar power plants, energy demand, and more. Built with flexibility and scalability in mind, it supports a range of features such as pushing measurements, retrieving forecasts, and managing locations.
 
-Before you start using the SDK, you need to obtain an API key. For the engine / demand API you will receive your key and relevant information from the alitiq Team. To obtain a key for the solar power forecasting API register here: [Solar-APP](https://solar-app.alitiq.com)
+Before you start using the SDK, you need to obtain an API key. For the engine / load API you will receive your key and relevant information from the alitiq Team. To obtain a key for the solar power forecasting API register here: [Solar-APP](https://solar-app.alitiq.com)
 
 This is a work in progress. We will shortly add an extensive documentation with step by step guides to use our API with python. 
 
@@ -23,8 +23,8 @@ This is a work in progress. We will shortly add an extensive documentation with 
 ## Features ✨  
 - **Solar Power Plant Management**:  
   Manage PV system configurations and retrieve forecasts for your solar power installations.  
-- **Demand Forecasting** by alitiq Engine:  
-  Fetch and manage energy demand forecasts for heat, gas, and electricity demand.  
+- **Load Forecasting** by alitiq Engine:  
+  Fetch and manage energy load forecasts for heat, gas, and electricity demand.  
 - **Pushing and Retrieving Measurements**:  
   Push new measurement data to the API and inspect historical measurement data.  
 - **Robust Validation**:  
@@ -128,11 +128,11 @@ forecasting-sdk/
 ├── alitiq/
 │   ├── base.py              # Base class for interacting with APIs
 │   ├── solar_api.py         # Solar forecasting service SDK
-│   ├── demand_api.py        # Demand forecasting service SDK
+│   ├── load_api.py          # Load forecasting service SDK
 │   └── enumerations/        # Enumerations for services and forecasting models
 ├── models/
 │   ├── solar.py             # Pydantic models for solar APIs
-│   └── demand_forecast.py   # Pydantic models for demand APIs
+│   └── load_forecast.py     # Pydantic models for load APIs
 ├── tests/                   # Unit tests for the SDK
 └── README.md                # Project documentation
 ```
@@ -149,12 +149,13 @@ Manage PV systems and retrieve solar power forecasts. Key methods:
 - `get_forecast`: Retrieve solar power forecasts for a specific location.  
 - `get_forecast_portfolio`: Retrieve solar power forecasts for the whole portfolio.  
 - `push_measurements`: Submit real-time measurements for your solar plant.  
+- `get_measurements`: Retrieve historical data for a location.  
 
-### Demand Forecasting Module (`demand_forecast.py`)  
-Interact with alitiq's demand forecast API for heat, gas, and electricity. Key methods:  
+### Load Forecasting Module (`demand_forecast.py`)  
+Interact with alitiq's load forecast API for heat, gas, and electricity. Key methods:  
 - `get_measurements`: Retrieve historical data for a location.  
 - `post_measurements`: Push new measurement data.  
-- `get_forecast`: Fetch demand forecasts for your configured location.  
+- `get_forecast`: Fetch load forecasts for your configured location.  
 
 ---
 
@@ -174,7 +175,8 @@ We welcome contributions! To contribute:
 ---
 
 ## License 📜  
-t.b.d.
+
+MIT License, see attached LICENSE
 
 ---
 

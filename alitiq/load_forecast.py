@@ -20,10 +20,10 @@ from alitiq.enumerations.forecast_models import (
     ForecastModels,
 )
 from alitiq.enumerations.services import Services
-from alitiq.models.demand_forecast import EngineMeasurementForm
+from alitiq.models.load_forecast import EngineMeasurementForm
 
 
-class alitiqDemandAPI(alitiqAPIBase):
+class alitiqLoadAPI(alitiqAPIBase):
     """
     Subclass to interact with the alitiq Engine Forecast API.
 
