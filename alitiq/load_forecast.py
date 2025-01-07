@@ -9,7 +9,7 @@ author: Daniel Lassahn, CTO, alitiq GmbH
 import json
 from datetime import datetime, timedelta
 from io import StringIO
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Any
 
 import pandas as pd
 from pydantic import ValidationError
@@ -163,3 +163,64 @@ class alitiqLoadAPI(alitiqAPIBase):
             ),
             orient="split",
         )
+
+    def get_forecast_portfolio(
+        self,
+        forecast_model: Optional[Union[str, ForecastModels]] = None,
+        dt_calc: Optional[datetime] = None,
+        power_measure: str = "kW",
+        timezone: str = "UTC",
+        interval_in_minutes: int = 15,
+        window_boundary: str = "end",
+        portfolio_sum_column: bool = True,
+    ) -> pd.DataFrame:
+        """
+        Retrieve the forecast for all locations in the portfolio.
+
+        Args:
+            forecast_model (Optional[Union[str, ForecastModels]]): The forecast model to use. Defaults to optimized
+                model.
+            dt_calc (Optional[datetime]): Calculation datetime for the forecast. Defaults to None.
+            power_measure (str): The unit of power measurement (e.g., 'kW'). Defaults to 'kW'.
+            timezone (str): The timezone for the forecast data. Defaults to 'UTC'.
+            interval_in_minutes (int): Forecast interval in minutes. Defaults to 15.
+            window_boundary (str): Window boundary for forecast data. Defaults to 'end'.
+            portfolio_sum_column (bool): Whether to include a portfolio summary column. Defaults to True.
+
+        Returns:
+            pd.DataFrame: A dataframe containing the portfolio forecast data.
+        """
+        raise NotImplementedError
+
+    def list_locations(self) -> pd.DataFrame:
+        """
+        Fetch the list of all available locations (Solar and Wind).
+
+        Returns:
+            pd.DataFrame: A dataframe containing details of all locations.
+        """
+        raise NotImplementedError
+
+    def create_location(self, location_data: Any) -> str:
+        """
+        Create a new location (Solar or Wind).
+
+        Args:
+            location_data (Any): The data for the new location.
+
+        Returns:
+            str: The response from the API.
+        """
+        raise NotImplementedError
+
+    def delete_location(self, location_id: str) -> str:
+        """
+        Delete a location by its ID. Only valid for Wind and SolarPV services.
+
+        Args:
+            location_id (str): The ID of the location to delete.
+
+        Returns:
+            str: The response from the API.
+        """
+        raise NotImplementedError
