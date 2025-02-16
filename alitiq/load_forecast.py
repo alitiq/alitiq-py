@@ -16,7 +16,6 @@ from pydantic import ValidationError
 
 from alitiq.base import alitiqAPIBase
 from alitiq.enumerations.forecast_models import (
-    FORECASTING_MODELS_TO_ALITIQ_MODEL_NAMING,
     ForecastModels,
 )
 from alitiq.enumerations.services import Services
@@ -70,7 +69,7 @@ class alitiqLoadAPI(alitiqAPIBase):
                     "GET",
                     "measurement/inspect/",
                     params={
-                        "id_location": location_id,
+                        "location_id": location_id,
                         "response_format": "json",
                         "start_date": start_date.strftime("%Y-%m-%dT%H:%M:%S"),
                         "end_date": end_date.strftime("%Y-%m-%dT%H:%M:%S"),
@@ -137,22 +136,14 @@ class alitiqLoadAPI(alitiqAPIBase):
         Returns:
             pd.DataFrame: Dataframe containing the forecast data.
         """
-        if forecast_model is None:
-            forecast_model = ForecastModels.ICON_EU
-        else:
-            forecast_model = ForecastModels(forecast_model)
-
         return pd.read_json(
             StringIO(
                 self._request(
                     "GET",
                     "forecast/",
                     params={
-                        "id_location": location_id,
+                        "location_id": location_id,
                         "response_format": "json",
-                        "weather_model": FORECASTING_MODELS_TO_ALITIQ_MODEL_NAMING[
-                            forecast_model
-                        ],
                         "power_measure": power_measure,
                         "timezone": timezone,
                         "interval_in_minutes": interval_in_minutes,
