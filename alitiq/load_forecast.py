@@ -19,7 +19,7 @@ from alitiq.enumerations.forecast_models import (
     ForecastModels,
 )
 from alitiq.enumerations.services import Services
-from alitiq.models.load_forecast import EngineMeasurementForm
+from alitiq.models.load_forecast import LoadMeasurementForm
 
 
 class alitiqLoadAPI(alitiqAPIBase):
@@ -80,13 +80,13 @@ class alitiqLoadAPI(alitiqAPIBase):
         )
 
     def post_measurements(
-        self, measurements: Union[EngineMeasurementForm, List[EngineMeasurementForm]]
+        self, measurements: Union[LoadMeasurementForm, List[LoadMeasurementForm]]
     ) -> str:
         """
         Push new Engine measurements to the API.
 
         Args:
-            measurements (Union[EngineMeasurementForm, List[EngineMeasurementForm]]):
+            measurements (Union[LoadMeasurementForm, List[EngineMeasurementForm]]):
                 A single EngineMeasurementForm instance or a list of such instances.
 
         Returns:
@@ -145,7 +145,7 @@ class alitiqLoadAPI(alitiqAPIBase):
                         "location_id": location_id,
                         "response_format": "json",
                         "power_measure": power_measure,
-                        "timezone": timezone,
+                        "tz": timezone,
                         "interval_in_minutes": interval_in_minutes,
                         "window_boundary": window_boundary,
                         "dt_calc": (

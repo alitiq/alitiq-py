@@ -9,9 +9,9 @@ from typing import Literal, Optional
 from pydantic import BaseModel, Field, validator
 
 
-class EngineMeasurementForm(BaseModel):
+class LoadMeasurementForm(BaseModel):
     """
-    Represents the data structure for engine/demand measurements.
+    Represents the data structure for load/demand measurements.
 
     Attributes:
         id_location (str): Unique identifier for the location.
