@@ -68,7 +68,7 @@ class alitiqSolarAPI(alitiqAPIBase):
         except ValidationError as e:
             raise ValueError(f"Validation failed for input data: {e}")
 
-        return self._request("POST", "pv_systems/add", data=json.dumps(validated_data))
+        return self._request("POST", "pv_systems/add/", data=json.dumps(validated_data))
 
     def delete_location(self, location_id: str) -> str:
         """

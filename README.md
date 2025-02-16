@@ -41,8 +41,8 @@ pip install alitiq
 Or check out locally:
 1. Clone the repository:  
    ```bash
-   git clone https://github.com/alitiq/forecasting-sdk.git
-   cd forecasting-sdk
+   git clone https://github.com/alitiq/alitiq-py.git
+   cd alitiq-py
    ```
 2. Install dependencies:  
    ```bash
