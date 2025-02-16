@@ -1,4 +1,4 @@
-""" easy access """
+"""easy access"""
 
 from alitiq.load_forecast import alitiqLoadAPI  # noqa
 from alitiq.models.load_forecast import EngineMeasurementForm  # noqa

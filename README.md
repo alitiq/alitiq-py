@@ -151,7 +151,7 @@ Manage PV systems and retrieve solar power forecasts. Key methods:
 - `push_measurements`: Submit real-time measurements for your solar plant.  
 - `get_measurements`: Retrieve historical data for a location.  
 
-### Load Forecasting Module (`demand_forecast.py`)  
+### Load Forecasting Module (`load_forecast.py`)  
 Interact with alitiq's load forecast API for heat, gas, and electricity. Key methods:  
 - `get_measurements`: Retrieve historical data for a location.  
 - `post_measurements`: Push new measurement data.  

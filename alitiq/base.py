@@ -36,8 +36,9 @@ class alitiqAPIBase(ABC):
 
     base_url_mapping = {
         # Services.WEATHER: "https://api.alitiq.com",
-        Services.SOLAR_POWER_FORECAST: "https://solar.alitiq.com",
-        Services.DEMAND_FORECAST: "https://engine.alitiq.com",
+        Services.SOLAR_POWER_FORECAST: "https://api.alitiq.com/solar",
+        Services.LOAD_FORECAST: "https://api.alitiq.com/load",
+        Services.WIND_POWER_FORECAST: "https://api.alitiq.com/wind",
     }
 
     def __init__(self, service: Union[str, Services], api_key: str):

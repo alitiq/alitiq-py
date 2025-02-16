@@ -81,7 +81,7 @@ class alitiqSolarAPI(alitiqAPIBase):
             Dict[str, Any]: API response.
         """
         return self._request(
-            "POST", "pv_systems/delete", params={"location_id": location_id}
+            "POST", "pv_systems/delete/", params={"location_id": location_id}
         )
 
     def get_measurements(
@@ -109,7 +109,7 @@ class alitiqSolarAPI(alitiqAPIBase):
             StringIO(
                 self._request(
                     "GET",
-                    "measurement/inspect",
+                    "measurement/inspect/",
                     params={
                         "location_id": location_id,
                         "response_format": "json",
@@ -148,7 +148,9 @@ class alitiqSolarAPI(alitiqAPIBase):
         except ValidationError as e:
             raise ValueError(f"Validation failed for input data: {e}")
 
-        return self._request("POST", "measurement/add", data=json.dumps(validated_data))
+        return self._request(
+            "POST", "measurement/add/", data=json.dumps(validated_data)
+        )
 
     def list_locations(self) -> pd.DataFrame:
         """
@@ -161,7 +163,7 @@ class alitiqSolarAPI(alitiqAPIBase):
             StringIO(
                 self._request(
                     "GET",
-                    "pv_systems/list",
+                    "pv_systems/list/",
                     params={
                         "response_format": "json",
                     },
@@ -204,7 +206,7 @@ class alitiqSolarAPI(alitiqAPIBase):
             StringIO(
                 self._request(
                     "GET",
-                    "forecast/single",
+                    "forecast/single/",
                     params={
                         "location_id": location_id,
                         "response_format": "json",
@@ -258,7 +260,7 @@ class alitiqSolarAPI(alitiqAPIBase):
             StringIO(
                 self._request(
                     "GET",
-                    "forecast/portfolio",
+                    "forecast/portfolio/",
                     params={
                         "response_format": "json",
                         "weather_model": FORECASTING_MODELS_TO_ALITIQ_MODEL_NAMING[

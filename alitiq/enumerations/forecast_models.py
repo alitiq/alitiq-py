@@ -1,4 +1,4 @@
-""" enumeration class for alitiq forecasting models """
+"""enumeration class for alitiq forecasting models"""
 
 from enum import Enum
 

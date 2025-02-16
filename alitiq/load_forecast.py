@@ -41,7 +41,7 @@ class alitiqLoadAPI(alitiqAPIBase):
         Args:
             api_key (str): API key for authentication.
         """
-        super().__init__(Services.DEMAND_FORECAST, api_key)
+        super().__init__(Services.LOAD_FORECAST, api_key)
 
     def get_measurements(
         self,
@@ -68,7 +68,7 @@ class alitiqLoadAPI(alitiqAPIBase):
             StringIO(
                 self._request(
                     "GET",
-                    "measurement/inspect",
+                    "measurement/inspect/",
                     params={
                         "id_location": location_id,
                         "response_format": "json",
@@ -107,7 +107,9 @@ class alitiqLoadAPI(alitiqAPIBase):
         except ValidationError as e:
             raise ValueError(f"Validation failed for input data: {e}")
 
-        return self._request("POST", "measurement/add", data=json.dumps(validated_data))
+        return self._request(
+            "POST", "measurement/add/", data=json.dumps(validated_data)
+        )
 
     def get_forecast(
         self,
@@ -144,7 +146,7 @@ class alitiqLoadAPI(alitiqAPIBase):
             StringIO(
                 self._request(
                     "GET",
-                    "forecast",
+                    "forecast/",
                     params={
                         "id_location": location_id,
                         "response_format": "json",
