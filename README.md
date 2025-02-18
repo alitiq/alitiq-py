@@ -8,7 +8,9 @@
 <p align="center">
 <a href="" target="_blank">
     <img src="https://img.shields.io/pypi/pyversions/fastapi.svg?color=%2334D058" alt="Supported Python versions">
-    <img src="https://img.shields.io/badge/Documentation-here-blue" href="https://docs.alitiq.com">
+</a>
+<a href="https://docs.alitiq.com">
+    <img src="https://img.shields.io/badge/Documentation-here-blue">
 </a>
 </p>
 
