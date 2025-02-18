@@ -8,11 +8,12 @@
 <p align="center">
 <a href="" target="_blank">
     <img src="https://img.shields.io/pypi/pyversions/fastapi.svg?color=%2334D058" alt="Supported Python versions">
+    <img src="https://img.shields.io/badge/Documentation-here-blue" href="https://docs.alitiq.com">
 </a>
 </p>
 
 ## Overview 🛠️
-Welcome to **alitiq's Forecasting Service SDK**, a robust Python-based SDK that simplifies interaction with alitiq’s Solar, and Engine (load) Forecast APIs. This SDK enables seamless data retrieval, measurements management, and forecasting for solar power plants, energy demand, and more. Built with flexibility and scalability in mind, it supports a range of features such as pushing measurements, retrieving forecasts, and managing locations.
+Welcome to **alitiq's Forecasting Service SDK**, a robust Python-based SDK that simplifies interaction with alitiq’s Solar, Wind and Load Forecast APIs. This SDK enables seamless data retrieval, measurements management, and forecasting for solar power plants, energy demand, and more. Built with flexibility and scalability in mind, it supports a range of features such as pushing measurements, retrieving forecasts, and managing locations.
 
 Before you start using the SDK, you need to obtain an API key. For the engine / load API you will receive your key and relevant information from the alitiq Team. To obtain a key for the solar power forecasting API register here: [Solar-APP](https://solar-app.alitiq.com)
 
@@ -22,7 +23,9 @@ This is a work in progress. We will shortly add an extensive documentation with 
 
 ## Features ✨  
 - **Solar Power Plant Management**:  
-  Manage PV system configurations and retrieve forecasts for your solar power installations.  
+  Manage PV system configurations and retrieve forecasts for your solar power installations. 
+- **WindPark Management**:  
+  Manage WindPark configurations and retrieve forecasts for your portfolio. 
 - **Load Forecasting** by alitiq Engine:  
   Fetch and manage energy load forecasts for heat, gas, and electricity demand.  
 - **Pushing and Retrieving Measurements**:  
@@ -117,24 +120,31 @@ response = solar_api.post_measurements(pv_measurements)
 print(response)
 
 ```
-Please note this docs for setting up your PV system locations: [How to setup PV systems at alitiq](https://makandracards.com/alitiq/621166-setup-pv-system-solar-power-forecast-alitiq/read)
+Please go to our docs for detailed information [alitiq-Docs](https://docs.alitiq.com)
 
 ---
 
 ## Project Structure 🏗️  
 
 ```plaintext
-forecasting-sdk/
-├── alitiq/
-│   ├── base.py              # Base class for interacting with APIs
-│   ├── solar_api.py         # Solar forecasting service SDK
-│   ├── load_api.py          # Load forecasting service SDK
-│   └── enumerations/        # Enumerations for services and forecasting models
-├── models/
-│   ├── solar.py             # Pydantic models for solar APIs
-│   └── load_forecast.py     # Pydantic models for load APIs
-├── tests/                   # Unit tests for the SDK
-└── README.md                # Project documentation
+alitiq/
+│── enumerations/
+│   │── __init__.py
+│   │── forecast_models.py
+│   │── services.py
+│
+│── models/
+│   │── __init__.py
+│   │── load_forecast.py
+│   │── solar_power_forecast.py
+│   │── wind_power_forecast.py
+│
+│── __init__.py
+│── base.py
+│── load_forecast.py
+│── solar_power_forecast.py
+│── wind_power_forecast.py
+
 ```
 
 ---
@@ -149,6 +159,16 @@ Manage PV systems and retrieve solar power forecasts. Key methods:
 - `get_forecast`: Retrieve solar power forecasts for a specific location.  
 - `get_forecast_portfolio`: Retrieve solar power forecasts for the whole portfolio.  
 - `push_measurements`: Submit real-time measurements for your solar plant.  
+- `get_measurements`: Retrieve historical data for a location.  
+
+### Wind Forecasting Module (`wind_power_forecast.py`)  
+Manage WindParks and retrieve wind power forecasts. Key methods:  
+- `create_location`: Add new WindPark configurations.
+- `list_locations`: List current portfolio
+- `delete_location`: Deletes one location from portfolio
+- `get_forecast`: Retrieve wind power forecasts for a specific location.  
+- `get_forecast_portfolio`: Retrieve wind power forecasts for the whole portfolio.  
+- `push_measurements`: Submit real-time measurements for your WindPark.  
 - `get_measurements`: Retrieve historical data for a location.  
 
 ### Load Forecasting Module (`load_forecast.py`)  
@@ -177,8 +197,6 @@ We welcome contributions! To contribute:
 ## License 📜  
 
 MIT License, see attached LICENSE
-
----
 
 ---
 
