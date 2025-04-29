@@ -67,8 +67,12 @@ class alitiqWindAPI(alitiqAPIBase):
             ]
         except ValidationError as e:
             raise ValueError(f"Validation failed for input data: {e}")
-
-        return self._request("POST", "wind_parks/add/", data=json.dumps(validated_data))
+        response = None
+        for location in validated_data:
+            response = self._request(
+                "POST", "wind_parks/add/", data=json.dumps(location)
+            )
+        return response
 
     def delete_location(self, location_id: str) -> str:
         """
