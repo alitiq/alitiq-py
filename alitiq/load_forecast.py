@@ -145,7 +145,7 @@ class alitiqLoadAPI(alitiqAPIBase):
                         "location_id": location_id,
                         "response_format": "json",
                         "power_measure": power_measure,
-                        "tz": timezone,
+                        "timezone": timezone,
                         "interval_in_minutes": interval_in_minutes,
                         "window_boundary": window_boundary,
                         "dt_calc": (
