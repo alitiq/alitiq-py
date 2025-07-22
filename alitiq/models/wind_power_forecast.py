@@ -4,10 +4,11 @@ pydantic models to pass relevant data to SDK functions
 author: Daniel Lassahn, CTO, alitiq GmbH
 """
 
-from datetime import time
-from typing import Literal, Optional
+from datetime import time, datetime
+from typing import Literal, Optional, Union
 
 from pydantic import BaseModel, Field, validator
+from pandas import Timestamp
 
 
 class WindPowerMeasurementForm(BaseModel):
@@ -99,3 +100,14 @@ class WindParkModel(LocationBaseSchema):
     """WindPark model form with all location information as well as list of wind turbines"""
 
     wind_turbines: Optional[list[WindTurbineSchema]] = []
+
+
+class CurtailmentForm(BaseModel):
+    """Form data to post curtailments to db"""
+
+    location_id: str
+    dt: Union[datetime, Timestamp]
+    level: float
+    timezone: str = "UTC"
+    interval_in_minutes: int = 15
+    window_boundary: str = "end"  # begin | center | end

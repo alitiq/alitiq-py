@@ -20,7 +20,7 @@ from alitiq.enumerations.forecast_models import (
     ForecastModels,
 )
 from alitiq.enumerations.services import Services
-from alitiq.models.solar_power_forecast import PvMeasurementForm, SolarPowerPlantModel
+from alitiq.models.solar_power_forecast import PvMeasurementForm, SolarPowerPlantModel, CurtailmentForm
 
 
 class alitiqSolarAPI(alitiqAPIBase):
@@ -154,6 +154,76 @@ class alitiqSolarAPI(alitiqAPIBase):
 
         return self._request(
             "POST", "measurement/add/", data=json.dumps(validated_data)
+        )
+
+    def inspect_curtailments(
+        self,
+        location_id: str,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
+    ) -> pd.DataFrame:
+        """
+        Retrieve curtailment records for a given wind park location.
+
+        Args:
+            location_id (str): The external location ID to query.
+            start_date (Optional[datetime]): Start date for the time range (default: 2 days ago).
+            end_date (Optional[datetime]): End date for the time range (default: now).
+
+        Returns:
+            pd.DataFrame: DataFrame containing curtailment records.
+        """
+        if end_date is None:
+            end_date = datetime.now()
+        if start_date is None:
+            start_date = end_date - timedelta(days=2)
+
+        return pd.read_json(
+            StringIO(
+                self._request(
+                    "GET",
+                    "curtailments/inspect/",
+                    params={
+                        "location_id": location_id,
+                        "response_format": "json",
+                        "start_date": start_date.strftime("%Y-%m-%dT%H:%M:%S"),
+                        "end_date": end_date.strftime("%Y-%m-%dT%H:%M:%S"),
+                    },
+                )
+            ),
+            orient="split",
+        )
+
+    def post_curtailments(
+            self,
+            curtailments: Union[CurtailmentForm, List[CurtailmentForm]],
+    ) -> str:
+        """
+        Push curtailment records to the alitiq SolarPower API.
+
+        Args:
+            curtailments (Union[CurtailmentForm, List[CurtailmentForm]]):
+                A single CurtailmentForm or a list of such forms representing curtailment events.
+
+        Returns:
+            str: API response message from the server.
+
+        Raises:
+            ValidationError: If the provided data is invalid.
+            requests.HTTPError: If the API request fails.
+        """
+        if not isinstance(curtailments, list):
+            curtailments = [curtailments]
+
+        try:
+            validated_data = [
+                curtailment.dict(exclude_unset=True) for curtailment in curtailments
+            ]
+        except ValidationError as e:
+            raise ValueError(f"Validation failed for input data: {e}")
+
+        return self._request(
+            "POST", "curtailments/add/", data=json.dumps(validated_data)
         )
 
     def list_locations(self) -> pd.DataFrame:
