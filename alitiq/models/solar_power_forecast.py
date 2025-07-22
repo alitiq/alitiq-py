@@ -4,11 +4,9 @@ pydantic models to pass relevant data to SDK functions
 author: Daniel Lassahn, CTO, alitiq GmbH
 """
 
-from datetime import datetime
-from typing import Literal, Optional, Union
+from typing import Literal, Optional
 
 from pydantic import BaseModel, Field, validator
-from pandas import Timestamp
 
 
 class PvMeasurementForm(BaseModel):
@@ -147,7 +145,7 @@ class CurtailmentForm(BaseModel):
     """Form data to post curtailments to db"""
 
     location_id: str
-    dt: Union[datetime, Timestamp]
+    dt: str  # isoformat '2024-06-10T10:15:00'
     level: float
     timezone: str = "UTC"
     interval_in_minutes: int = 15
