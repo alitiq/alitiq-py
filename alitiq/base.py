@@ -222,6 +222,7 @@ class alitiqAPIBase(ABC):
         pass
 
     def _check_for_duplicate_entries(
+        self,
         data: Union[Type[BaseModel], List[Type[BaseModel]]],
     ) -> None:
         """internal function to check for duplicate entries in pydantic form data with location_id and dt"""
