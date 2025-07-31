@@ -11,11 +11,10 @@ import logging
 from abc import ABC, abstractmethod
 from collections import Counter
 from datetime import datetime
-from typing import Any, List, Optional, Type, Union
+from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 import requests
-from pydantic import BaseModel
 
 from alitiq.enumerations.forecast_models import ForecastModels
 from alitiq.enumerations.services import Services
@@ -223,13 +222,13 @@ class alitiqAPIBase(ABC):
 
     def _check_for_duplicate_entries(
         self,
-        data: Union[Type[BaseModel], List[Type[BaseModel]]],
+        data: List[Dict[str, Any]],
     ) -> None:
         """internal function to check for duplicate entries in pydantic form data with location_id and dt"""
         if not isinstance(data, list):
             data = [data]
 
-        key_tuples = [(item.location_id, item.dt) for item in data]
+        key_tuples = [(item["location_id"], item["dt"]) for item in data]
 
         # Count duplicates
         duplicates = [item for item, count in Counter(key_tuples).items() if count > 1]
