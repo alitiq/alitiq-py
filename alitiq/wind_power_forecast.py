@@ -20,7 +20,11 @@ from alitiq.enumerations.forecast_models import (
     ForecastModels,
 )
 from alitiq.enumerations.services import Services
-from alitiq.models.wind_power_forecast import WindPowerMeasurementForm, WindParkModel, CurtailmentForm
+from alitiq.models.wind_power_forecast import (
+    CurtailmentForm,
+    WindParkModel,
+    WindPowerMeasurementForm,
+)
 
 
 class alitiqWindAPI(alitiqAPIBase):
@@ -153,6 +157,8 @@ class alitiqWindAPI(alitiqAPIBase):
         except ValidationError as e:
             raise ValueError(f"Validation failed for input data: {e}")
 
+        self._check_for_duplicate_entries(validated_data)
+
         return self._request(
             "POST", "measurement/add/", data=json.dumps(validated_data)
         )
@@ -196,8 +202,8 @@ class alitiqWindAPI(alitiqAPIBase):
         )
 
     def post_curtailments(
-            self,
-            curtailments: Union[CurtailmentForm, List[CurtailmentForm]],
+        self,
+        curtailments: Union[CurtailmentForm, List[CurtailmentForm]],
     ) -> str:
         """
         Push curtailment records to the alitiq WindPower API.
@@ -222,6 +228,8 @@ class alitiqWindAPI(alitiqAPIBase):
             ]
         except ValidationError as e:
             raise ValueError(f"Validation failed for input data: {e}")
+
+        self._check_for_duplicate_entries(validated_data)
 
         return self._request(
             "POST", "curtailments/add/", data=json.dumps(validated_data)

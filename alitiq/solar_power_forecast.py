@@ -20,7 +20,11 @@ from alitiq.enumerations.forecast_models import (
     ForecastModels,
 )
 from alitiq.enumerations.services import Services
-from alitiq.models.solar_power_forecast import PvMeasurementForm, SolarPowerPlantModel, CurtailmentForm
+from alitiq.models.solar_power_forecast import (
+    CurtailmentForm,
+    PvMeasurementForm,
+    SolarPowerPlantModel,
+)
 
 
 class alitiqSolarAPI(alitiqAPIBase):
@@ -70,7 +74,7 @@ class alitiqSolarAPI(alitiqAPIBase):
         response = None
         for location in validated_data:
             response = self._request(
-                "POST", "pv_systems/add/", data=json.dumps(validated_data)
+                "POST", "pv_systems/add/", data=json.dumps(location)
             )
         return response
 
@@ -152,6 +156,8 @@ class alitiqSolarAPI(alitiqAPIBase):
         except ValidationError as e:
             raise ValueError(f"Validation failed for input data: {e}")
 
+        self._check_for_duplicate_entries(validated_data)
+
         return self._request(
             "POST", "measurement/add/", data=json.dumps(validated_data)
         )
@@ -195,8 +201,8 @@ class alitiqSolarAPI(alitiqAPIBase):
         )
 
     def post_curtailments(
-            self,
-            curtailments: Union[CurtailmentForm, List[CurtailmentForm]],
+        self,
+        curtailments: Union[CurtailmentForm, List[CurtailmentForm]],
     ) -> str:
         """
         Push curtailment records to the alitiq SolarPower API.
@@ -221,6 +227,8 @@ class alitiqSolarAPI(alitiqAPIBase):
             ]
         except ValidationError as e:
             raise ValueError(f"Validation failed for input data: {e}")
+
+        self._check_for_duplicate_entries(validated_data)
 
         return self._request(
             "POST", "curtailments/add/", data=json.dumps(validated_data)

@@ -9,7 +9,7 @@ author: Daniel Lassahn, CTO, alitiq GmbH
 import json
 from datetime import datetime, timedelta
 from io import StringIO
-from typing import List, Optional, Union, Any
+from typing import Any, List, Optional, Union
 
 import pandas as pd
 from pydantic import ValidationError
