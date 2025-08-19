@@ -9,7 +9,7 @@ author: Daniel Lassahn, CTO, alitiq GmbH
 import json
 from datetime import datetime, timedelta
 from io import StringIO
-from typing import Any, List, Optional, Union
+from typing import List, Optional, Union
 
 import pandas as pd
 from pydantic import ValidationError
@@ -19,7 +19,7 @@ from alitiq.enumerations.forecast_models import (
     ForecastModels,
 )
 from alitiq.enumerations.services import Services
-from alitiq.models.load_forecast import LoadMeasurementForm
+from alitiq.models.load_forecast import LoadLocationForm, LoadMeasurementForm
 
 
 class alitiqLoadAPI(alitiqAPIBase):
@@ -192,11 +192,22 @@ class alitiqLoadAPI(alitiqAPIBase):
         Returns:
             pd.DataFrame: A dataframe containing details of all locations.
         """
-        raise NotImplementedError
+        return pd.read_json(
+            StringIO(
+                self._request(
+                    "GET",
+                    "load/location/list/",
+                    params={"response_format": "json"},
+                )
+            ),
+            orient="split",
+        )
 
-    def create_location(self, location_data: Any) -> str:
+    def create_location(
+        self, locations: Union[LoadLocationForm, List[LoadLocationForm]]
+    ) -> str:
         """
-        Create a new location (Solar or Wind).
+        Create a new load location .
 
         Args:
             location_data (Any): The data for the new location.
@@ -204,7 +215,18 @@ class alitiqLoadAPI(alitiqAPIBase):
         Returns:
             str: The response from the API.
         """
-        raise NotImplementedError
+        if not isinstance(locations, list):
+            locations = [locations]
+        try:
+            validated_data = [
+                location.dict(exclude_unset=True) for location in locations
+            ]
+        except ValidationError as e:
+            raise ValueError(f"Validation failed for input data: {e}")
+        response = None
+        for location in validated_data:
+            response = self._request("POST", "location/add", data=json.dumps(location))
+        return response
 
     def delete_location(self, location_id: str) -> str:
         """

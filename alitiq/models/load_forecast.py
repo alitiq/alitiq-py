@@ -6,7 +6,7 @@ author: Daniel Lassahn, CTO, alitiq GmbH
 
 from typing import Literal, Optional
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator, validator
 
 
 class LoadMeasurementForm(BaseModel):
@@ -53,3 +53,34 @@ class LoadMeasurementForm(BaseModel):
                 "interval_in_minutes is required when window_boundary is 'begin' or 'center'."
             )
         return value
+
+
+class LoadLocationForm(BaseModel):
+    """
+    Pydantic model for creating a new load forecasting location.
+    Matches the API schema for /load/location/add/
+    """
+
+    site_name: str = Field(..., description="Display name of the location")
+    location_id: Optional[str] = Field(
+        None,
+        description="Optional external location ID. If omitted, the API assigns one automatically.",
+    )
+    latitude: float = Field(
+        ..., ge=-90.0, le=90.0, description="Latitude in decimal degrees"
+    )
+    longitude: float = Field(
+        ..., ge=-180.0, le=180.0, description="Longitude in decimal degrees"
+    )
+    service: str = Field(
+        default="electricity-load",
+        description="Service type (electricity-load, district-heating, gas_load, etc.)",
+    )
+
+    @field_validator("site_name")
+    @classmethod
+    def validate_site_name(cls, v: str) -> str:
+        """validate site name not empty"""
+        if not v.strip():
+            raise ValueError("site_name cannot be empty")
+        return v

@@ -122,6 +122,29 @@ response = solar_api.post_measurements(pv_measurements)
 print(response)
 
 ```
+
+### Setup a load location
+
+
+```python
+from alitiq.models.load_forecast import LoadLocationForm
+
+# Example
+api = alitiqLoadAPI(api_key="your-key")
+
+location = LoadLocationForm(
+    site_name="HQ Campus",
+    location_id="HQ-001",
+    latitude=52.52,
+    longitude=13.405,
+    service=Services.ELECTRICITY_LOAD,
+)
+
+resp = api.create_location(location)
+print(resp)
+
+
+```
 Please go to our docs for detailed information [alitiq-Docs](https://docs.alitiq.com)
 
 ---
