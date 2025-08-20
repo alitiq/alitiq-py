@@ -6,7 +6,7 @@ author: Daniel Lassahn, CTO, alitiq GmbH
 
 from typing import Literal, Optional
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator, model_validator, validator
 
 
 class PvMeasurementForm(BaseModel):
@@ -78,6 +78,9 @@ class SolarPowerPlantModel(BaseModel):
         azimuth (float): Azimuth angle of the panels (0-360, where 180 is South).
         tilt (float): Tilt angle of the panels (0-90 degrees).
         temp_factor (Optional[float]): Optional temperature factor affecting system performance.
+            roof_mounted: 0.03
+            roof_mounted goof ventilation: 0.035
+            roof_integrated: 0.05
         mover (Optional[int]): Type of tracking system (e.g., 0 for fixed, 1 for single-axis tracking).
         max_rotation_angle (Optional[float]): Maximum rotation angle for tracking systems.
         row_distance (Optional[float]): Distance between rows in meters.
@@ -86,21 +89,19 @@ class SolarPowerPlantModel(BaseModel):
     """
 
     site_name: str
-    location_id: str  # your internal identifier
+    location_id: str
     latitude: float
     longitude: float
     installed_power: float = Field(..., gt=0, description="Installed power in kW")
     installed_power_inverter: float = Field(
         ..., gt=0, description="Installed power of the inverter in kW"
     )
-    azimuth: float = Field(
-        ..., ge=0, le=360, description="Azimuth angle (180 is South)"
-    )
+    azimuth: float = Field(..., ge=0, le=360, description="Azimuth angle (180 is South)")
     tilt: float = Field(..., ge=0, le=90, description="Tilt angle of the panels")
     temp_factor: Optional[float] = Field(
-        default=0.0033,
-        description="Temperature factor (optional). 0.0033 for free mounting, "
-        "0.004 for roof mounted, 0.005 for roof integrated",
+        default=0.03,
+        description="Temperature factor (optional). 0.03 for free mounting, "
+        "0.04 for roof mounted, 0.05 for roof integrated",
     )
     mover: Optional[int] = Field(
         default=1, description="Tracking type (e.g., 1 for fixed, 2 for single-axis)"
@@ -118,9 +119,30 @@ class SolarPowerPlantModel(BaseModel):
         None, description="Length of each table in meters"
     )
 
-    class Config:
-        """pydantic scheme example"""
+    @field_validator("temp_factor", mode="before")
+    @classmethod
+    def limit_temp_factor(cls, v):
+        return min(float(v), 0.05) if v is not None else None
 
+    @model_validator(mode="after")
+    def check_tracking_fields(self):
+        if self.mover and self.mover > 1:
+            missing = []
+            if self.row_distance is None:
+                missing.append("row_distance")
+            if self.table_length is None:
+                missing.append("table_length")
+            if self.max_rotation_angle is None:
+                missing.append("max_rotation_angle")
+            if self.do_backtracking is None:
+                missing.append("do_backtracking")
+            if missing:
+                raise ValueError(
+                    f"When mover > 1, these fields must not be None: {', '.join(missing)}"
+                )
+        return self
+
+    class Config:
         schema_extra = {
             "example": {
                 "site_name": "Desert Solar Plant",
@@ -131,8 +153,8 @@ class SolarPowerPlantModel(BaseModel):
                 "installed_power_inverter": 4800.0,
                 "azimuth": 180.0,
                 "tilt": 25.0,
-                "temp_factor": 0.95,
-                "mover": 1,
+                "temp_factor": 0.03,
+                "mover": 2,
                 "max_rotation_angle": 45.0,
                 "row_distance": 5.0,
                 "do_backtracking": True,

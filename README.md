@@ -81,6 +81,7 @@ plant = SolarPowerPlantModel(
     installed_power_inverter=480.0,
     azimuth=180.0,
     tilt=25.0,
+    temp_factor=0.03
 )
 
 response = solar_api.create_location(plant)
