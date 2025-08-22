@@ -4,3 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [tool.isort]
 profile = "black"
+
+[project]
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}

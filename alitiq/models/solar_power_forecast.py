@@ -96,7 +96,9 @@ class SolarPowerPlantModel(BaseModel):
     installed_power_inverter: float = Field(
         ..., gt=0, description="Installed power of the inverter in kW"
     )
-    azimuth: float = Field(..., ge=0, le=360, description="Azimuth angle (180 is South)")
+    azimuth: float = Field(
+        ..., ge=0, le=360, description="Azimuth angle (180 is South)"
+    )
     tilt: float = Field(..., ge=0, le=90, description="Tilt angle of the panels")
     temp_factor: Optional[float] = Field(
         default=0.03,
@@ -122,10 +124,12 @@ class SolarPowerPlantModel(BaseModel):
     @field_validator("temp_factor", mode="before")
     @classmethod
     def limit_temp_factor(cls, v):
+        """help customer to set correct temp factors"""
         return min(float(v), 0.05) if v is not None else None
 
     @model_validator(mode="after")
     def check_tracking_fields(self):
+        """when mover > 1  we need to assure that all reelvant information provided"""
         if self.mover and self.mover > 1:
             missing = []
             if self.row_distance is None:
@@ -143,6 +147,8 @@ class SolarPowerPlantModel(BaseModel):
         return self
 
     class Config:
+        """config class"""
+
         schema_extra = {
             "example": {
                 "site_name": "Desert Solar Plant",

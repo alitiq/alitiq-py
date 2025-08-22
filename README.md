@@ -128,7 +128,7 @@ print(response)
 
 
 ```python
-from alitiq.models.load_forecast import LoadLocationForm
+from alitiq import alitiqLoadAPI, LoadLocationForm
 
 # Example
 api = alitiqLoadAPI(api_key="your-key")
@@ -184,7 +184,7 @@ Manage PV systems and retrieve solar power forecasts. Key methods:
 - `delete_location`: Deletes one location from portfolio
 - `get_forecast`: Retrieve solar power forecasts for a specific location.  
 - `get_forecast_portfolio`: Retrieve solar power forecasts for the whole portfolio.  
-- `push_measurements`: Submit real-time measurements for your solar plant.  
+- `post_measurements`: Submit real-time measurements for your solar plant.  
 - `get_measurements`: Retrieve historical data for a location.  
 
 ### Wind Forecasting Module (`wind_power_forecast.py`)  
@@ -194,11 +194,13 @@ Manage WindParks and retrieve wind power forecasts. Key methods:
 - `delete_location`: Deletes one location from portfolio
 - `get_forecast`: Retrieve wind power forecasts for a specific location.  
 - `get_forecast_portfolio`: Retrieve wind power forecasts for the whole portfolio.  
-- `push_measurements`: Submit real-time measurements for your WindPark.  
+- `post_measurements`: Submit real-time measurements for your WindPark.  
 - `get_measurements`: Retrieve historical data for a location.  
 
 ### Load Forecasting Module (`load_forecast.py`)  
 Interact with alitiq's load forecast API for heat, gas, and electricity. Key methods:  
+- `create_location`: Add new load forecast asset/location.
+- `list_locations`: List your load forecasting portfolio.
 - `get_measurements`: Retrieve historical data for a location.  
 - `post_measurements`: Push new measurement data.  
 - `get_forecast`: Fetch load forecasts for your configured location.  

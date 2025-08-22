@@ -1,7 +1,5 @@
 """ nox session definition """
-import os
 from typing import Any
-import subprocess
 
 import nox
 

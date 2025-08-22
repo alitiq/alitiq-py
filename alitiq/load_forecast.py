@@ -49,7 +49,7 @@ class alitiqLoadAPI(alitiqAPIBase):
         end_date: Optional[datetime] = None,
     ) -> pd.DataFrame:
         """
-        Fetch solar measurement data for a specific system.
+        Fetch load measurement data for a specific system.
 
         Args:
             location_id (str): The ID of the location.
@@ -187,7 +187,7 @@ class alitiqLoadAPI(alitiqAPIBase):
 
     def list_locations(self) -> pd.DataFrame:
         """
-        Fetch the list of all available locations (Solar and Wind).
+        Fetch the list of all available locations.
 
         Returns:
             pd.DataFrame: A dataframe containing details of all locations.
@@ -196,7 +196,7 @@ class alitiqLoadAPI(alitiqAPIBase):
             StringIO(
                 self._request(
                     "GET",
-                    "load/location/list/",
+                    "location/list/",
                     params={"response_format": "json"},
                 )
             ),

@@ -1,6 +1,7 @@
 """easy access"""
 
 from alitiq.load_forecast import alitiqLoadAPI  # noqa
+from alitiq.models.load_forecast import LoadLocationForm  # noqa
 from alitiq.models.load_forecast import LoadMeasurementForm  # noqa
 from alitiq.models.solar_power_forecast import PvMeasurementForm  # noqa
 from alitiq.models.solar_power_forecast import SolarPowerPlantModel  # noqa
