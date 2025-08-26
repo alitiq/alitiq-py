@@ -108,6 +108,9 @@ class SolarPowerPlantModel(BaseModel):
     mover: Optional[int] = Field(
         default=1, description="Tracking type (e.g., 1 for fixed, 2 for single-axis)"
     )
+    height: Optional[float] = Field(
+        None, description="Height of the rotation axis of the pv table (in metres)"
+    )
     max_rotation_angle: Optional[float] = Field(
         None, description="Maximum rotation angle for tracking systems"
     )
@@ -140,6 +143,8 @@ class SolarPowerPlantModel(BaseModel):
                 missing.append("max_rotation_angle")
             if self.do_backtracking is None:
                 missing.append("do_backtracking")
+            if self.height is None:
+                missing.append("height")
             if missing:
                 raise ValueError(
                     f"When mover > 1, these fields must not be None: {', '.join(missing)}"
@@ -161,6 +166,7 @@ class SolarPowerPlantModel(BaseModel):
                 "tilt": 25.0,
                 "temp_factor": 0.03,
                 "mover": 2,
+                "height": 2.0,
                 "max_rotation_angle": 45.0,
                 "row_distance": 5.0,
                 "do_backtracking": True,
