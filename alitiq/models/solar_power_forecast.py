@@ -154,7 +154,7 @@ class SolarPowerPlantModel(BaseModel):
     class Config:
         """config class"""
 
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "site_name": "Desert Solar Plant",
                 "location_id": "12345",
