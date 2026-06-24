@@ -129,6 +129,7 @@ print(response)
 
 ```python
 from alitiq import alitiqLoadAPI, LoadLocationForm
+from alitiq.enumerations.services import Services
 
 # Example
 api = alitiqLoadAPI(api_key="your-key")
