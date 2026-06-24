@@ -138,7 +138,7 @@ location = LoadLocationForm(
     location_id="HQ-001",
     latitude=52.52,
     longitude=13.405,
-    service=Services.ELECTRICITY_LOAD,
+    service=Services.ELECTRICITY_LOAD.value,
 )
 
 resp = api.create_location(location)
