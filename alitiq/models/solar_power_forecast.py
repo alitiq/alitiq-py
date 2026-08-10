@@ -86,6 +86,8 @@ class SolarPowerPlantModel(BaseModel):
         row_distance (Optional[float]): Distance between rows in meters.
         do_backtracking (Optional[bool]): Whether the system uses backtracking.
         table_length (Optional[float]): Length of each table in meters.
+        self_consumption (bool): Whether the location consumes part of its own
+            generation behind the meter (location-level flag, default False).
     """
 
     site_name: str
@@ -122,6 +124,11 @@ class SolarPowerPlantModel(BaseModel):
     )
     table_length: Optional[float] = Field(
         None, description="Length of each table in meters"
+    )
+    self_consumption: bool = Field(
+        default=False,
+        description="Whether the location consumes part of its own generation "
+        "behind the meter (location-level flag)",
     )
 
     @field_validator("temp_factor", mode="before")
