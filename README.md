@@ -17,7 +17,7 @@
 ## Overview 🛠️
 Welcome to **alitiq's Forecasting Service SDK**, a robust Python-based SDK that simplifies interaction with alitiq’s Solar, Wind and Load Forecast APIs. This SDK enables seamless data retrieval, measurements management, and forecasting for solar power plants, energy demand, and more. Built with flexibility and scalability in mind, it supports a range of features such as pushing measurements, retrieving forecasts, and managing locations.
 
-Before you start using the SDK, you need to obtain an API key. For the engine / load API you will receive your key and relevant information from the alitiq Team. To obtain a key for the solar power forecasting API register here: [Solar-APP](https://solar-app.alitiq.com)
+Before you start using the SDK, you need to obtain an API key. Please ask our sales team via sales@alitiq.com to obtain access. 
 
 This is a work in progress. We will shortly add an extensive documentation with step by step guides to use our API with python. 
 
