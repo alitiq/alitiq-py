@@ -1,6 +1,6 @@
 
 <p align="center">
-  <a href="https://www.alitiq.com"><img src="https://alitiq.com/wp-content/uploads/2022/08/Logo-1.png" alt="alitiq Forecasting Energy"></a>
+  <a href="https://www.alitiq.com"><img src="https://alitiq.com/lovable-uploads/ccbd17e8-5cac-4432-87dc-4adff0f65e46.png" alt="alitiq Forecasting Energy"></a>
 </p>
 <p align="center">
     <em>alitiq-py , high performance, easy to use, ready for production python software development kit </em>
