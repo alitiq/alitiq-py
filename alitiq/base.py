@@ -7,9 +7,11 @@ for API interaction and serves as a blueprint for specific service integrations.
 author: Daniel Lassahn, CTO, alitiq GmbH
 """
 
+import json
 import logging
 from abc import ABC, abstractmethod
 from collections import Counter
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Union
 
@@ -20,6 +22,23 @@ from alitiq.enumerations.forecast_models import ForecastModels
 from alitiq.enumerations.services import Services
 
 WEATHER_API_BASE_URL = "https://api.alitiq.com/weather"
+ACCOUNT_API_BASE_URL = "https://api.alitiq.com/account"
+
+
+@dataclass(frozen=True)
+class TokenExpiration:
+    """
+    Expiration status of the API key used by the client.
+
+    Attributes:
+        token_set_at (datetime): When the current API key was issued (UTC).
+        token_expire_at (Optional[datetime]): When the API key expires (UTC), None if it never expires.
+        expires_in_days (Optional[int]): Full days left until expiration, None if it never expires.
+    """
+
+    token_set_at: datetime
+    token_expire_at: Optional[datetime]
+    expires_in_days: Optional[int]
 
 
 class alitiqAPIBase(ABC):
@@ -90,6 +109,32 @@ class alitiqAPIBase(ABC):
         except Exception as e:
             logging.error(f"Unexpected error: {e}")
             raise
+
+    def get_token_expiration(self) -> TokenExpiration:
+        """
+        Fetch the expiration status of the API key used by this client.
+
+        The key is shared across all alitiq services, so the result is the same for every client.
+
+        Returns:
+            TokenExpiration: When the key was issued, when it expires and how many days are left.
+
+        Raises:
+            requests.HTTPError: If the API request fails, e.g. with 401/403 for an expired or invalid key.
+        """
+        response = json.loads(
+            self._request("GET", "token/expiration/", base_url=ACCOUNT_API_BASE_URL)
+        )
+        token_expire_at = response.get("token_expire_at")
+        return TokenExpiration(
+            token_set_at=pd.Timestamp(response["token_set_at"]).to_pydatetime(),
+            token_expire_at=(
+                pd.Timestamp(token_expire_at).to_pydatetime()
+                if token_expire_at
+                else None
+            ),
+            expires_in_days=response.get("expires_in_days"),
+        )
 
     @abstractmethod
     def get_measurements(

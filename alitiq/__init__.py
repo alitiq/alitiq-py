@@ -1,5 +1,6 @@
 """easy access"""
 
+from alitiq.base import TokenExpiration  # noqa
 from alitiq.load_forecast import alitiqLoadAPI  # noqa
 from alitiq.models.load_forecast import LoadLocationForm  # noqa
 from alitiq.models.load_forecast import LoadMeasurementForm  # noqa
