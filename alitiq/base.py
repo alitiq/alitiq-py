@@ -19,6 +19,8 @@ import requests
 from alitiq.enumerations.forecast_models import ForecastModels
 from alitiq.enumerations.services import Services
 
+WEATHER_API_BASE_URL = "https://api.alitiq.com/weather"
+
 
 class alitiqAPIBase(ABC):
     """
@@ -57,13 +59,17 @@ class alitiqAPIBase(ABC):
         self.session.headers.update({"x-api-key": self.api_key})
         logging.basicConfig(level=logging.INFO)
 
-    def _request(self, method: str, endpoint: str, **kwargs) -> str:
+    def _request(
+        self, method: str, endpoint: str, base_url: Optional[str] = None, **kwargs
+    ) -> str:
         """
         Execute an HTTP request and handle common error scenarios.
 
         Args:
             method (str): The HTTP method (e.g., 'GET', 'POST').
             endpoint (str): The API endpoint path (relative to the base URL).
+            base_url (Optional[str]): Base URL to use instead of the service's base URL,
+                e.g. for weather endpoints. Defaults to None.
             **kwargs: Additional parameters passed to the `requests.Session.request` method.
 
         Returns:
@@ -73,7 +79,7 @@ class alitiqAPIBase(ABC):
             requests.exceptions.HTTPError: If the HTTP request returns a client or server error.
             Exception: For any other unexpected errors during the request.
         """
-        url = f"{self.base_url}/{endpoint.lstrip('/')}"
+        url = f"{(base_url or self.base_url).rstrip('/')}/{endpoint.lstrip('/')}"
         try:
             response = self.session.request(method, url, verify=True, **kwargs)
             response.raise_for_status()

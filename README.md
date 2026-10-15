@@ -124,6 +124,34 @@ print(response)
 
 ```
 
+### Simulate a PV system from satellite irradiance
+Runs a simulation on the fly for any PV system configuration. Pass one `SolarPowerPlantModel` per subsystem; nothing is stored.
+```python
+from datetime import datetime
+from alitiq import alitiqSolarAPI, SolarPowerPlantModel
+
+solar_api = alitiqSolarAPI(api_key="your-api-key")
+
+plant = SolarPowerPlantModel(
+    site_name="My Solar Plant",
+    location_id="SP123",
+    latitude=48.160170,
+    longitude=10.55907,
+    installed_power=500.0,
+    installed_power_inverter=480.0,
+    azimuth=180.0,
+    tilt=25.0,
+)
+
+simulation = solar_api.simulate_pv_power(
+    plant,
+    start_date=datetime(2026, 9, 1),
+    end_date=datetime(2026, 9, 8),
+    interpolate_to_15min=True,  # cm_saf_europe delivers 10-minute values
+)
+print(simulation[["power", "global_horizontal_irradiance", "air_temperature_2m"]])
+```
+
 ### Setup a load location
 
 
@@ -187,6 +215,7 @@ Manage PV systems and retrieve solar power forecasts. Key methods:
 - `get_forecast_portfolio`: Retrieve solar power forecasts for the whole portfolio.  
 - `post_measurements`: Submit real-time measurements for your solar plant.  
 - `get_measurements`: Retrieve historical data for a location.  
+- `simulate_pv_power`: Simulate the power output of any PV system configuration from satellite irradiance observations, without adding it to your portfolio.  
 
 ### Wind Forecasting Module (`wind_power_forecast.py`)  
 Manage WindParks and retrieve wind power forecasts. Key methods:  

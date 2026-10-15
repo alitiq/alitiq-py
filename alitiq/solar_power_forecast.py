@@ -7,14 +7,14 @@ author: Daniel Lassahn, CTO, alitiq GmbH
 """
 
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from io import StringIO
 from typing import List, Optional, Union
 
 import pandas as pd
 from pydantic import ValidationError
 
-from alitiq.base import alitiqAPIBase
+from alitiq.base import WEATHER_API_BASE_URL, alitiqAPIBase
 from alitiq.enumerations.forecast_models import (
     FORECASTING_MODELS_TO_ALITIQ_MODEL_NAMING,
     ForecastModels,
@@ -359,6 +359,73 @@ class alitiqSolarAPI(alitiqAPIBase):
                         ),
                         "portfolio_sum_column": portfolio_sum_column,
                     },
+                )
+            ),
+            orient="split",
+        )
+
+    def simulate_pv_power(
+        self,
+        locations: Union[SolarPowerPlantModel, List[SolarPowerPlantModel]],
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
+        satellite: str = "cm_saf_europe",
+        interpolate_to_15min: bool = False,
+    ) -> pd.DataFrame:
+        """
+        Simulate the power output of a PV system based on satellite irradiance observations.
+
+        The simulation runs on the fly for the given configuration; nothing is stored and the
+        system doesn't need to be part of your portfolio. Pass one SolarPowerPlantModel per
+        subsystem, all with the same coordinates.
+
+        Args:
+            locations (Union[SolarPowerPlantModel, List[SolarPowerPlantModel]]):
+                The subsystems of a single PV system.
+            start_date (Optional[datetime]): Start of the period in UTC (default: 1 day before end_date).
+            end_date (Optional[datetime]): End of the period in UTC (default: now).
+            satellite (str): Satellite irradiance source, 'cm_saf_europe' (10-minute values) or
+                'cm_saf' (15-minute values). Requests before 2026-07-10 use 'cm_saf' (default: 'cm_saf_europe').
+            interpolate_to_15min (bool): Interpolate the irradiance to 15-minute values before the
+                simulation (default: False).
+
+        Returns:
+            pd.DataFrame: Simulated `power` (in the unit of `installed_power`),
+                `global_horizontal_irradiance` (W/m²) and `air_temperature_2m` (°C).
+
+        Raises:
+            ValidationError: If the provided data is invalid.
+            requests.HTTPError: If the API request fails.
+        """
+        if not isinstance(locations, list):
+            locations = [locations]
+        try:
+            validated_data = [
+                location.dict(exclude_unset=True) for location in locations
+            ]
+        except ValidationError as e:
+            raise ValueError(f"Validation failed for input data: {e}")
+
+        if end_date is None:
+            end_date = datetime.now(timezone.utc).replace(tzinfo=None)
+        if start_date is None:
+            start_date = end_date - timedelta(days=1)
+
+        return pd.read_json(
+            StringIO(
+                self._request(
+                    "POST",
+                    "irradiance/simulation/",
+                    base_url=WEATHER_API_BASE_URL,
+                    params={
+                        "response_format": "json",
+                        "start_date": start_date.strftime("%Y-%m-%dT%H:%M:%S"),
+                        "end_date": end_date.strftime("%Y-%m-%dT%H:%M:%S"),
+                        "satellite": satellite,
+                        "interpolate_to_15min": interpolate_to_15min,
+                    },
+                    data=json.dumps(validated_data),
+                    headers={"Content-Type": "application/json"},
                 )
             ),
             orient="split",
